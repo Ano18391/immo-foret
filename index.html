@@ -1,0 +1,1165 @@
+```html
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f5f4ec">
+    <title>ImmoForêt — Calculateur immobilier</title>
+
+    <style>
+        :root
+        {
+            --forest: #244d3a;
+            --forest-dark: #183728;
+            --green: #527b5c;
+            --sage: #e6eee2;
+            --cream: #f5f4ec;
+            --white: #ffffff;
+            --text: #24382c;
+            --muted: #7b897e;
+            --border: #e2e7dc;
+            --gold: #d4ad68;
+            --red: #a6463c;
+            --shadow: 0 12px 40px rgba(36, 77, 58, 0.07);
+        }
+
+        *
+        {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body
+        {
+            font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: var(--cream);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        button,
+        input
+        {
+            font: inherit;
+        }
+
+        button
+        {
+            cursor: pointer;
+        }
+
+        .navbar
+        {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 22px 7%;
+            border-bottom: 1px solid rgba(36, 77, 58, 0.09);
+            background: rgba(255, 255, 255, 0.65);
+        }
+
+        .brand
+        {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            font-weight: 800;
+            font-size: 21px;
+            letter-spacing: -0.7px;
+            color: var(--forest);
+        }
+
+        .brand-icon
+        {
+            width: 39px;
+            height: 39px;
+            display: grid;
+            place-items: center;
+            background: var(--forest);
+            color: #fff;
+            border-radius: 13px;
+            font-size: 22px;
+        }
+
+        .nav-label
+        {
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+        }
+
+        .hero
+        {
+            text-align: center;
+            padding: 60px 20px 34px;
+        }
+
+        .eyebrow
+        {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 13px;
+            border-radius: 30px;
+            background: #e7eee2;
+            color: var(--forest);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .eyebrow-dot
+        {
+            width: 7px;
+            height: 7px;
+            background: #73956b;
+            border-radius: 50%;
+        }
+
+        h1
+        {
+            font-size: clamp(32px, 5vw, 51px);
+            line-height: 1.13;
+            letter-spacing: -2px;
+            color: var(--forest-dark);
+            margin-bottom: 17px;
+        }
+
+        h1 span
+        {
+            color: var(--green);
+            font-family: Georgia, "Times New Roman", serif;
+            font-weight: 400;
+            font-style: italic;
+        }
+
+        .hero p
+        {
+            max-width: 570px;
+            margin: auto;
+            color: #778479;
+            font-size: 15px;
+        }
+
+        .main-container
+        {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 12px 24px 70px;
+        }
+
+        .workspace
+        {
+            display: grid;
+            grid-template-columns: 1fr 0.95fr;
+            gap: 23px;
+            align-items: start;
+        }
+
+        .card
+        {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 23px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .section-heading
+        {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            margin-bottom: 27px;
+        }
+
+        .section-icon
+        {
+            width: 45px;
+            height: 45px;
+            border-radius: 14px;
+            display: grid;
+            place-items: center;
+            background: var(--sage);
+            font-size: 22px;
+        }
+
+        .section-heading h2
+        {
+            font-size: 19px;
+            letter-spacing: -0.5px;
+        }
+
+        .section-heading p
+        {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 2px;
+        }
+
+        .field
+        {
+            margin-bottom: 22px;
+        }
+
+        .field-label
+        {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 9px;
+        }
+
+        .field label
+        {
+            font-size: 13px;
+            font-weight: 700;
+            color: #36483b;
+        }
+
+        .field-hint
+        {
+            font-size: 11px;
+            color: #8b978d;
+        }
+
+        .input-wrap
+        {
+            display: flex;
+            align-items: center;
+            border: 1px solid #dfe6db;
+            border-radius: 12px;
+            background: #fcfdf9;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            overflow: hidden;
+        }
+
+        .input-wrap:focus-within
+        {
+            border-color: #75977b;
+            box-shadow: 0 0 0 3px rgba(82, 123, 92, 0.1);
+        }
+
+        .input-wrap input
+        {
+            width: 100%;
+            min-width: 0;
+            padding: 14px 15px;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: var(--forest-dark);
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .input-suffix
+        {
+            padding: 0 15px;
+            color: #7d8b7d;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .field-grid
+        {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .divider
+        {
+            border: none;
+            height: 1px;
+            background: var(--border);
+            margin: 27px 0;
+        }
+
+        .btn-primary
+        {
+            width: 100%;
+            border: none;
+            border-radius: 13px;
+            padding: 16px 20px;
+            background: var(--forest);
+            color: white;
+            font-weight: 750;
+            font-size: 14px;
+            box-shadow: 0 7px 17px rgba(36, 77, 58, 0.14);
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .btn-primary:hover
+        {
+            background: var(--forest-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary
+        {
+            background: #edf2e9;
+            color: var(--forest);
+            border: 1px solid #dce7d8;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .result-card
+        {
+            background: var(--forest);
+            color: white;
+            border-radius: 23px;
+            padding: 30px;
+            box-shadow: 0 18px 45px rgba(24, 55, 40, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-card::before
+        {
+            content: "";
+            position: absolute;
+            width: 230px;
+            height: 230px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            top: -115px;
+            right: -65px;
+            pointer-events: none;
+        }
+
+        .result-card::after
+        {
+            content: "";
+            position: absolute;
+            width: 170px;
+            height: 170px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 50%;
+            top: -85px;
+            right: -35px;
+            pointer-events: none;
+        }
+
+        .result-top
+        {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 29px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .result-top h2
+        {
+            font-size: 18px;
+            letter-spacing: -0.4px;
+        }
+
+        .live-badge
+        {
+            padding: 6px 9px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            background: rgba(255, 255, 255, 0.07);
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            color: #d9e9d5;
+            white-space: nowrap;
+        }
+
+        .result-label
+        {
+            color: #c1d1c3;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .main-price
+        {
+            font-size: clamp(30px, 4vw, 43px);
+            letter-spacing: -1.7px;
+            font-weight: 800;
+            line-height: 1.25;
+            overflow-wrap: anywhere;
+        }
+
+        .price-per-meter
+        {
+            margin-top: 10px;
+            color: #c6d7c7;
+            font-size: 13px;
+        }
+
+        .price-per-meter strong
+        {
+            color: white;
+        }
+
+        .result-status
+        {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            margin-top: 20px;
+            padding: 8px 11px;
+            border-radius: 9px;
+            background: rgba(255, 255, 255, 0.1);
+            font-size: 11px;
+            font-weight: 650;
+        }
+
+        .status-dot
+        {
+            width: 7px;
+            height: 7px;
+            background: #a5d4a0;
+            border-radius: 50%;
+        }
+
+        .status-warning
+        {
+            background: rgba(214, 153, 91, 0.17);
+            color: #ffdfb1;
+        }
+
+        .status-warning .status-dot
+        {
+            background: #efbd78;
+        }
+
+        .result-divider
+        {
+            border: none;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.15);
+            margin: 26px 0;
+        }
+
+        .breakdown-title
+        {
+            font-size: 13px;
+            color: #dce7dd;
+            font-weight: 750;
+            margin-bottom: 18px;
+        }
+
+        .breakdown-row
+        {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            margin: 15px 0;
+            font-size: 12px;
+            color: #cfddcf;
+        }
+
+        .breakdown-row span:last-child
+        {
+            text-align: right;
+            color: white;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .breakdown-row.total
+        {
+            padding-top: 17px;
+            border-top: 1px solid rgba(255, 255, 255, 0.16);
+            color: white;
+            font-weight: 750;
+            font-size: 13px;
+        }
+
+        .breakdown-row.total span:last-child
+        {
+            color: #d5e8ce;
+        }
+
+        .disclaimer
+        {
+            color: #b6c8b8;
+            font-size: 10px;
+            line-height: 1.7;
+            margin-top: 22px;
+        }
+
+        .details-section
+        {
+            margin-top: 24px;
+        }
+
+        .details-heading
+        {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .details-heading h3
+        {
+            font-size: 15px;
+            letter-spacing: -0.3px;
+        }
+
+        .details-heading span
+        {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .metric
+        {
+            background: #f7f9f3;
+            border: 1px solid #e8ede2;
+            border-radius: 14px;
+            padding: 16px;
+        }
+
+        .metric-label
+        {
+            color: #7b897d;
+            font-size: 11px;
+            margin-bottom: 7px;
+        }
+
+        .metric-value
+        {
+            color: var(--forest);
+            font-size: 19px;
+            font-weight: 800;
+            letter-spacing: -0.6px;
+            overflow-wrap: anywhere;
+        }
+
+        .metric-sub
+        {
+            color: #8a968a;
+            font-size: 10px;
+            margin-top: 5px;
+        }
+
+        .metrics-grid
+        {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 11px;
+        }
+
+        .notice
+        {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 13px;
+            background: #f7f3e8;
+            border: 1px solid #eee5ce;
+            color: #786742;
+            font-size: 11px;
+            line-height: 1.7;
+        }
+
+        .notice strong
+        {
+            color: #65542f;
+        }
+
+        .footer
+        {
+            text-align: center;
+            padding: 25px 20px;
+            border-top: 1px solid var(--border);
+            color: #899489;
+            font-size: 11px;
+        }
+
+        .footer strong
+        {
+            color: var(--forest);
+        }
+
+        .error-message
+        {
+            display: none;
+            color: var(--red);
+            font-size: 12px;
+            margin-top: 12px;
+        }
+
+        .error-message.visible
+        {
+            display: block;
+        }
+
+        @media (max-width: 800px)
+        {
+            .workspace
+            {
+                grid-template-columns: 1fr;
+            }
+
+            .hero
+            {
+                padding-top: 43px;
+            }
+
+            .navbar
+            {
+                padding: 17px 5%;
+            }
+
+            .nav-label
+            {
+                font-size: 9px;
+            }
+
+            .main-container
+            {
+                padding: 10px 15px 45px;
+            }
+        }
+
+        @media (max-width: 420px)
+        {
+            .card,
+            .result-card
+            {
+                padding: 21px;
+                border-radius: 18px;
+            }
+
+            .field-grid
+            {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .main-price
+            {
+                font-size: 33px;
+            }
+
+            .brand
+            {
+                font-size: 18px;
+            }
+
+            .metrics-grid
+            {
+                gap: 8px;
+            }
+
+            .metric
+            {
+                padding: 12px;
+            }
+
+            .metric-value
+            {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="brand">
+            <div class="brand-icon">♧</div>
+            ImmoForêt
+        </div>
+
+        <div class="nav-label">Outils d'investissement</div>
+    </header>
+
+    <section class="hero">
+        <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            Analyse immobilière
+        </div>
+
+        <h1>
+            Achetez au bon prix.<br>
+            <span>Investissez avec méthode.</span>
+        </h1>
+
+        <p>
+            Estimez votre prix d'achat maximal avant de vous engager.
+            Une vision claire de vos coûts, de votre marge et de votre opération.
+        </p>
+    </section>
+
+    <main class="main-container">
+
+        <div class="workspace">
+
+            <!-- FORMULAIRE -->
+            <section class="card">
+
+                <div class="section-heading">
+                    <div class="section-icon">⌂</div>
+
+                    <div>
+                        <h2>Votre projet immobilier</h2>
+                        <p>Renseignez les caractéristiques du bien.</p>
+                    </div>
+                </div>
+
+                <form id="calculatorForm">
+
+                    <div class="field">
+                        <div class="field-label">
+                            <label for="resalePrice">
+                                Prix de revente estimé
+                            </label>
+
+                            <span class="field-hint">Après rénovation</span>
+                        </div>
+
+                        <div class="input-wrap">
+                            <input
+                                id="resalePrice"
+                                type="number"
+                                min="0.01"
+                                max="100000000"
+                                step="any"
+                                value="4200"
+                                required
+                            >
+                            <span class="input-suffix">€/m²</span>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="field-label">
+                            <label for="surface">Surface du bien</label>
+                        </div>
+
+                        <div class="input-wrap">
+                            <input
+                                id="surface"
+                                type="number"
+                                min="0.01"
+                                max="1000000"
+                                step="any"
+                                value="50"
+                                required
+                            >
+                            <span class="input-suffix">m²</span>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="field-label">
+                            <label for="workCost">Coût des travaux</label>
+                            <span class="field-hint">Rénovation estimée</span>
+                        </div>
+
+                        <div class="input-wrap">
+                            <input
+                                id="workCost"
+                                type="number"
+                                min="0"
+                                max="10000000"
+                                step="any"
+                                value="800"
+                                required
+                            >
+                            <span class="input-suffix">€/m²</span>
+                        </div>
+                    </div>
+
+                    <hr class="divider">
+
+                    <div class="field-grid">
+
+                        <div class="field">
+                            <div class="field-label">
+                                <label for="margin">Marge cible</label>
+                            </div>
+
+                            <div class="input-wrap">
+                                <input
+                                    id="margin"
+                                    type="number"
+                                    min="0"
+                                    max="100"
+                                    step="any"
+                                    value="20"
+                                    required
+                                >
+                                <span class="input-suffix">%</span>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="field-label">
+                                <label for="fees">Frais annexes</label>
+                            </div>
+
+                            <div class="input-wrap">
+                                <input
+                                    id="fees"
+                                    type="number"
+                                    min="0"
+                                    max="100"
+                                    step="any"
+                                    value="6"
+                                    required
+                                >
+                                <span class="input-suffix">%</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <button type="submit" class="btn-primary">
+                        Calculer mon prix d'achat maximal →
+                    </button>
+
+                    <p id="errorMessage" class="error-message" role="alert"></p>
+
+                </form>
+
+            </section>
+
+            <!-- RESULTATS -->
+            <div>
+
+                <section class="result-card" aria-live="polite">
+
+                    <div class="result-top">
+                        <h2>Votre résultat</h2>
+                        <span class="live-badge">✦ Calcul instantané</span>
+                    </div>
+
+                    <p class="result-label">
+                        Prix d'achat maximal conseillé
+                    </p>
+
+                    <div id="maxPrice" class="main-price">120 000 €</div>
+
+                    <p class="price-per-meter">
+                        Soit maximum <strong id="maxPriceM2">2 400 €/m²</strong>
+                    </p>
+
+                    <div id="status" class="result-status">
+                        <span class="status-dot"></span>
+                        <span id="statusText">Marge cible intégrée</span>
+                    </div>
+
+                    <hr class="result-divider">
+
+                    <h3 class="breakdown-title">Répartition de l'opération</h3>
+
+                    <div class="breakdown-row">
+                        <span>Revente estimée</span>
+                        <span id="resaleTotal">210 000 €</span>
+                    </div>
+
+                    <div class="breakdown-row">
+                        <span>Travaux estimés</span>
+                        <span id="workTotal">− 40 000 €</span>
+                    </div>
+
+                    <div class="breakdown-row">
+                        <span>Frais annexes estimés</span>
+                        <span id="feesTotal">− 12 600 €</span>
+                    </div>
+
+                    <div class="breakdown-row">
+                        <span>Marge cible</span>
+                        <span id="marginTotal">− 42 000 €</span>
+                    </div>
+
+                    <div class="breakdown-row total">
+                        <span>Prix d'achat maximal</span>
+                        <span id="breakdownMax">115 400 €</span>
+                    </div>
+
+                    <p class="disclaimer">
+                        Simulation indicative. Les résultats dépendent des
+                        hypothèses saisies et ne constituent pas une garantie
+                        de rentabilité. Vérifiez les frais réels, la fiscalité
+                        et les conditions de financement avant tout achat.
+                    </p>
+
+                </section>
+
+                <section class="details-section">
+
+                    <div class="details-heading">
+                        <h3>Vue d'ensemble</h3>
+                        <span>Indicateurs du projet</span>
+                    </div>
+
+                    <div class="metrics-grid">
+
+                        <div class="metric">
+                            <div class="metric-label">Budget travaux</div>
+                            <div id="metricWork" class="metric-value">40 000 €</div>
+                            <div class="metric-sub">Coût total estimé</div>
+                        </div>
+
+                        <div class="metric">
+                            <div class="metric-label">Marge cible</div>
+                            <div id="metricMargin" class="metric-value">42 000 €</div>
+                            <div class="metric-sub">Avant fiscalité</div>
+                        </div>
+
+                        <div class="metric">
+                            <div class="metric-label">Coût total maximal</div>
+                            <div id="metricCost" class="metric-value">168 000 €</div>
+                            <div class="metric-sub">Achat + travaux + frais</div>
+                        </div>
+
+                        <div class="metric">
+                            <div class="metric-label">Marge sur revente</div>
+                            <div id="metricRate" class="metric-value">20 %</div>
+                            <div class="metric-sub">Selon votre hypothèse</div>
+                        </div>
+
+                    </div>
+
+                    <div class="notice">
+                        <strong>À retenir :</strong> le prix d'achat maximal
+                        est le montant à ne pas dépasser selon vos hypothèses.
+                        Si le vendeur demande davantage, négociez ou réévaluez
+                        votre opération.
+                    </div>
+
+                    <button
+                        type="button"
+                        id="resetButton"
+                        class="btn-secondary"
+                        style="margin-top: 15px;"
+                    >
+                        ↺ Réinitialiser les valeurs
+                    </button>
+
+                </section>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        <strong>ImmoForêt</strong> · Analysez vos projets avec clarté.<br>
+        <span>Outil de simulation indépendant — aucun conseil financier personnalisé.</span>
+    </footer>
+
+    <script>
+        const form = document.getElementById("calculatorForm");
+
+        const fields = {
+            resalePrice: document.getElementById("resalePrice"),
+            surface: document.getElementById("surface"),
+            workCost: document.getElementById("workCost"),
+            margin: document.getElementById("margin"),
+            fees: document.getElementById("fees")
+        };
+
+        const errorMessage = document.getElementById("errorMessage");
+
+        const defaultValues = {
+            resalePrice: 4200,
+            surface: 50,
+            workCost: 800,
+            margin: 20,
+            fees: 6
+        };
+
+        const euroFormatter = new Intl.NumberFormat("fr-FR", {
+            style: "currency",
+            currency: "EUR",
+            maximumFractionDigits: 2
+        });
+
+        const numberFormatter = new Intl.NumberFormat("fr-FR", {
+            maximumFractionDigits: 2
+        });
+
+        function formatEuro(value) {
+            return euroFormatter.format(value);
+        }
+
+        function formatNumber(value) {
+            return numberFormatter.format(value);
+        }
+
+        function display(id, value) {
+            document.getElementById(id).textContent = value;
+        }
+
+        function getInputs() {
+            const values = {};
+
+            for (const [name, input] of Object.entries(fields)) {
+                const rawValue = input.value.trim();
+
+                if (rawValue === "") {
+                    throw new Error("Veuillez remplir tous les champs.");
+                }
+
+                const value = Number(rawValue);
+
+                if (!Number.isFinite(value)) {
+                    throw new Error("Veuillez saisir uniquement des nombres valides.");
+                }
+
+                values[name] = value;
+            }
+
+            if (values.resalePrice <= 0) {
+                throw new Error("Le prix de revente au m² doit être supérieur à zéro.");
+            }
+
+            if (values.surface <= 0) {
+                throw new Error("La surface doit être supérieure à zéro.");
+            }
+
+            if (values.workCost < 0 || values.workCost > 10000000) {
+                throw new Error("Le coût des travaux doit être compris entre 0 et 10 000 000 €/m².");
+            }
+
+            if (values.resalePrice > 100000000) {
+                throw new Error("Le prix de revente au m² est trop élevé.");
+            }
+
+            if (values.surface > 1000000) {
+                throw new Error("La surface saisie est trop élevée.");
+            }
+
+            if (values.margin < 0 || values.margin > 100) {
+                throw new Error("La marge doit être comprise entre 0 et 100 %.");
+            }
+
+            if (values.fees < 0 || values.fees > 100) {
+                throw new Error("Les frais annexes doivent être compris entre 0 et 100 %.");
+            }
+
+            return values;
+        }
+
+        function calculate() {
+            try {
+                const values = getInputs();
+
+                const {
+                    resalePrice,
+                    surface,
+                    workCost,
+                    margin,
+                    fees
+                } = values;
+
+                // 1. Valeur totale estimée après rénovation.
+                const resaleTotal = resalePrice * surface;
+
+                // 2. Marge cible calculée sur le prix de revente.
+                const marginTotal = resaleTotal * margin / 100;
+
+                // 3. Coût total des travaux.
+                const workTotal = workCost * surface;
+
+                // 4. Frais annexes estimés en pourcentage de la revente.
+                const feesTotal = resaleTotal * fees / 100;
+
+                // 5. Prix d'achat maximal selon le modèle choisi.
+                const maxPrice =
+                    resaleTotal - workTotal - feesTotal - marginTotal;
+
+                // Coût total du projet au prix d'achat maximal,
+                // hors autres dépenses non intégrées dans le modèle.
+                const totalProjectCost =
+                    maxPrice + workTotal + feesTotal;
+
+                display("maxPrice", formatEuro(maxPrice));
+                display(
+                    "maxPriceM2",
+                    formatEuro(maxPrice / surface) + "/m²"
+                );
+
+                display("resaleTotal", formatEuro(resaleTotal));
+                display("workTotal", "− " + formatEuro(workTotal));
+                display("feesTotal", "− " + formatEuro(feesTotal));
+                display("marginTotal", "− " + formatEuro(marginTotal));
+                display("breakdownMax", formatEuro(maxPrice));
+
+                display("metricWork", formatEuro(workTotal));
+                display("metricMargin", formatEuro(marginTotal));
+                display("metricCost", formatEuro(totalProjectCost));
+                display("metricRate", formatNumber(margin) + " %");
+
+                const status = document.getElementById("status");
+                const statusText = document.getElementById("statusText");
+
+                if (maxPrice <= 0) {
+                    status.classList.add("status-warning");
+                    statusText.textContent =
+                        "Attention : opération non viable selon ces hypothèses";
+                } else if (margin === 0) {
+                    status.classList.remove("status-warning");
+                    statusText.textContent =
+                        "Aucune marge cible prévue";
+                } else {
+                    status.classList.remove("status-warning");
+                    statusText.textContent =
+                        "Marge cible intégrée";
+                }
+
+                errorMessage.textContent = "";
+                errorMessage.classList.remove("visible");
+
+            } catch (error) {
+                errorMessage.textContent = error.message;
+                errorMessage.classList.add("visible");
+            }
+        }
+
+        // Calcul automatique à chaque modification.
+        for (const input of Object.values(fields)) {
+            input.addEventListener("input", calculate);
+        }
+
+        form.addEventListener("submit", function(event) {
+            event.preventDefault();
+            calculate();
+        });
+
+        // Restauration des valeurs de démonstration.
+        document.getElementById("resetButton").addEventListener("click", function() {
+            for (const [name, value] of Object.entries(defaultValues)) {
+                fields[name].value = value;
+            }
+
+            calculate();
+        });
+
+        // Premier calcul au chargement.
+        calculate();
+    </script>
+
+</body>
+</html>
+```
